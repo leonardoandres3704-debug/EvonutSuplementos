@@ -72,6 +72,7 @@ export type ProductoCatalogo = {
   archivo: string
   nombre: string
   marca: string | null
+  marcaSlug: string | null
   categoriaSlug: string | null
   categoriaLabel: string | null
   imagen: string
@@ -144,6 +145,7 @@ export function getCatalogo(): CatalogoData {
       archivo,
       nombre,
       marca,
+      marcaSlug: marca ? normalizarSlug(marca) : null,
       categoriaSlug,
       categoriaLabel,
       imagen: `/catalogo/${segmentos.map(encodeURIComponent).join("/")}`,
@@ -180,4 +182,25 @@ export function getCatalogo(): CatalogoData {
 
 export function getTotalProductos(data: CatalogoData) {
   return data.productos.length
+}
+
+// Toma una muestra repartida entre marcas distintas, para mostrar una vista previa variada en la home.
+export function getMuestraCatalogo(data: CatalogoData, cantidad = 8): ProductoCatalogo[] {
+  const porMarca = new Map<string, ProductoCatalogo[]>()
+  for (const p of data.productos) {
+    const key = p.marca ?? "sin-marca"
+    if (!porMarca.has(key)) porMarca.set(key, [])
+    porMarca.get(key)!.push(p)
+  }
+
+  const grupos = Array.from(porMarca.values())
+  const muestra: ProductoCatalogo[] = []
+  let i = 0
+  while (muestra.length < cantidad && grupos.some((g) => g.length > 0)) {
+    const grupo = grupos[i % grupos.length]
+    if (grupo.length > 0) muestra.push(grupo.shift()!)
+    i++
+  }
+
+  return muestra
 }

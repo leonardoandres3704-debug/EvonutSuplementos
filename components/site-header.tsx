@@ -1,16 +1,18 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { whatsappLink } from "@/lib/data"
 
 const navLinks = [
-  { href: "#productos", label: "Productos" },
+  { href: "/#inicio", label: "Inicio" },
+  { href: "/#productos", label: "Productos" },
   { href: "/catalogo", label: "Catálogo completo" },
-  { href: "#combos", label: "Combos" },
-  { href: "#marcas", label: "Marcas" },
-  { href: "#nosotros", label: "Nosotros" },
+  { href: "/#combos", label: "Combos" },
+  { href: "/#marcas", label: "Marcas" },
+  { href: "/#nosotros", label: "Nosotros" },
 ]
 
 export function SiteHeader() {
@@ -19,21 +21,21 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-6">
-        <a href="#inicio" className="flex items-center gap-2">
+        <Link href="/#inicio" className="flex items-center gap-2">
           <span className="font-heading text-2xl font-bold uppercase tracking-tight text-foreground">
             Evo<span className="text-primary">nut</span>
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className="text-sm font-medium uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -62,14 +64,14 @@ export function SiteHeader() {
         <div className="border-t border-border bg-background md:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className="rounded-md px-2 py-3 text-sm font-medium uppercase tracking-wide text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             <Button asChild className="mt-2">
               <a

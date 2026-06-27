@@ -13,7 +13,7 @@ export function CatalogoGrid({ data }: { data: CatalogoData }) {
     let base = data.productos
 
     if (marcaActiva !== "todas") {
-      base = base.filter((p) => p.marca && p.marca.toLowerCase() === marcaActiva)
+      base = base.filter((p) => p.marcaSlug === marcaActiva)
     }
 
     if (categoriaActiva !== "todas") {
