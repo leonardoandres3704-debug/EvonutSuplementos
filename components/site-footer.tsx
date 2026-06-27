@@ -6,10 +6,8 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-12 md:flex-row md:items-center md:justify-between md:px-6">
         <div>
-          <span className="font-heading text-2xl font-bold uppercase tracking-tight text-foreground">
-            Evo<span className="text-primary">nut</span>
-          </span>
-          <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
+          <img src="/logo-evonut.png" alt="Evonut Suplementos Deportivos" className="h-12 w-auto" />
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Suplementos deportivos de más de 20 marcas. Combos a medida para maratón, ciclismo y
             gym.
           </p>
@@ -17,8 +15,8 @@ export function SiteFooter() {
 
         <div className="flex flex-col gap-4">
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <a href="#productos" className="text-muted-foreground transition-colors hover:text-foreground">
-              Productos
+            <a href="/catalogo" className="text-muted-foreground transition-colors hover:text-foreground">
+              Catálogo
             </a>
             <a href="#combos" className="text-muted-foreground transition-colors hover:text-foreground">
               Combos

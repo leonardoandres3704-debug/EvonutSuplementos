@@ -75,28 +75,13 @@ export const categorias = [
 ]
 
 export const marcas = [
-  "ProLine",
-  "PureFuel",
-  "IgniteLab",
-  "AminoCore",
-  "RunFast",
-  "HydroPlus",
-  "MaxGains",
-  "VitalEdge",
-  "NitroPeak",
-  "EnduroFuel",
-  "PowerCell",
-  "CoreLab",
-  "FlexNutri",
-  "ApexFit",
-  "TitanSupps",
-  "RecoverX",
-  "VeloFuel",
-  "PrimeWhey",
-  "BoostLine",
-  "OmegaSport",
-  "ZenAmino",
-  "RushPump",
+  "Muscletech",
+  "Universal",
+  "Optimum Nutrition",
+  "Nutrex",
+  "Cellucor",
+  "Myprotein",
+  "BSN",
 ]
 
 export type Combo = {

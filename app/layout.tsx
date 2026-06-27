@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   title: 'Evonut | Suplementos deportivos de alto rendimiento',
   description:
     'Evonut distribuye más de 20 marcas de suplementos deportivos. Encontrá proteínas, creatina, pre-entrenos y combos a medida para maratón, ciclismo y gym.',
-  generator: 'v0.app',
   icons: {
     icon: [
       {

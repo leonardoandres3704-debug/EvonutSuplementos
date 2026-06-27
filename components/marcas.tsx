@@ -8,15 +8,15 @@ export function Marcas() {
           Distribución oficial
         </span>
         <h2 className="mt-3 font-heading text-3xl font-bold uppercase tracking-tight text-balance text-foreground sm:text-4xl md:text-5xl">
-          Más de 20 marcas en un solo lugar
+          Nuestras marcas importadas
         </h2>
         <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
-          Trabajamos con un distribuidor que reúne las marcas más reconocidas del mundo del
-          suplemento deportivo. Si buscás una marca puntual, escribinos.
+          Además de nuestro catálogo local, trabajamos con marcas importadas reconocidas a nivel
+          mundial. Si buscás una marca puntual, escribinos.
         </p>
       </div>
 
-      <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 lg:grid-cols-4">
         {marcas.map((marca) => (
           <div
             key={marca}

@@ -1,8 +1,8 @@
 import { SiteHeader } from "@/components/site-header"
 import { Hero } from "@/components/hero"
 import { Benefits } from "@/components/benefits"
+import { InfoNutricional } from "@/components/info-nutricional"
 import { Combos } from "@/components/combos"
-import { Productos } from "@/components/productos"
 import { CatalogoPreview } from "@/components/catalogo-preview"
 import { Marcas } from "@/components/marcas"
 import { ContactoCta } from "@/components/contacto-cta"
@@ -15,8 +15,8 @@ export default function Page() {
       <SiteHeader />
       <Hero />
       <Benefits />
+      <InfoNutricional />
       <Combos />
-      <Productos />
       <CatalogoPreview />
       <Marcas />
       <ContactoCta />
