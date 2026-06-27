@@ -10,8 +10,8 @@ export const metadata = {
 }
 
 export default function CatalogoPage() {
-  const categorias = getCatalogo()
-  const total = getTotalProductos(categorias)
+  const catalogo = getCatalogo()
+  const total = getTotalProductos(catalogo)
 
   return (
     <main className="min-h-screen bg-background">
@@ -30,7 +30,7 @@ export default function CatalogoPage() {
             </p>
           </div>
 
-          <CatalogoGrid categorias={categorias} />
+          <CatalogoGrid data={catalogo} />
         </div>
       </section>
       <SiteFooter />

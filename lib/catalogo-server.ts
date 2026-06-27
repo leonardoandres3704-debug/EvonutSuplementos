@@ -1,104 +1,183 @@
 import fs from "node:fs"
 import path from "node:path"
 
-// Carpeta donde Leonardo va a ir dejando las imágenes, organizadas por categoría.
-// Cada subcarpeta de /public/catalogo es una categoría.
-// Cada archivo dentro es un producto: el NOMBRE DEL ARCHIVO se usa como nombre del producto.
+// Carpeta donde Leonardo va dejando las imágenes. Soporta cualquier organización:
+//   /catalogo/Marca/foto.jpg                      -> marca = Marca
+//   /catalogo/categoria/foto.jpg                  -> categoria = categoria
+//   /catalogo/Cualquier cosa/Marca/foto.jpg        -> marca = Marca (la carpeta intermedia se ignora)
+//   /catalogo/Cualquier cosa/categoria/foto.jpg    -> categoria = categoria
 const CATALOGO_DIR = path.join(process.cwd(), "public", "catalogo")
 
 const EXTENSIONES_VALIDAS = [".jpg", ".jpeg", ".png", ".webp", ".gif"]
 
-// Etiquetas lindas para mostrar según el nombre de la carpeta (slug).
-// Si aparece una carpeta nueva que no está en este mapa, se usa el nombre de la carpeta tal cual.
-const ETIQUETAS_CATEGORIA: Record<string, string> = {
+// Carpetas "contenedoras" sin significado propio (ej: "Nueva carpeta") que se ignoran
+// a la hora de decidir marca/categoría, pero sus imágenes igual se muestran.
+const CARPETAS_IGNORADAS = ["nueva carpeta", "sin nombre", "fotos", "catalogo", "imagenes"]
+
+// Nombres de carpeta que representan CATEGORÍAS (no marcas). Se reconocen por slug normalizado
+// (sin tildes, sin guiones, en minúscula). Si una carpeta no está en esta lista, se asume que es marca.
+const CATEGORIAS_CONOCIDAS: Record<string, string> = {
   proteinas: "Proteínas",
   creatinas: "Creatinas",
-  "pre-entrenos": "Pre-entrenos",
+  preentrenos: "Pre-entrenos",
   aminoacidos: "Aminoácidos",
+  aminoasidos: "Aminoácidos",
   energeticos: "Energéticos",
   hidratacion: "Hidratación",
   vitaminas: "Vitaminas",
+  combos: "Combos",
+  barrasproteicas: "Barras proteicas",
+  pastademani: "Pasta de maní",
+  suplementos: "Suplementos varios",
   otros: "Otros",
 }
 
-export type ProductoCatalogo = {
-  archivo: string
-  nombre: string
-  categoriaSlug: string
-  categoriaLabel: string
-  imagen: string
+function normalizarSlug(nombre: string) {
+  return nombre
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // sin tildes
+    .toLowerCase()
+    .replace(/[-_\s]+/g, "")
+    .trim()
 }
 
-export type CategoriaCatalogo = {
-  slug: string
-  label: string
-  productos: ProductoCatalogo[]
+function esCarpetaIgnorada(nombre: string) {
+  return CARPETAS_IGNORADAS.includes(nombre.toLowerCase().trim())
 }
 
-// Patrones típicos de WhatsApp / cámara que NO sirven como nombre de producto.
-// Si el archivo se llama así, se muestra un nombre genérico en vez del nombre de archivo crudo.
-const PATRONES_GENERICOS = [/^img[-_]?\d+/i, /^wa\d+/i, /^image/i, /^foto/i, /^\d+$/]
+function tituloDesdeNombreCarpeta(nombre: string) {
+  return nombre
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .split(" ")
+    .map((p) => (p ? p[0].toUpperCase() + p.slice(1) : p))
+    .join(" ")
+}
+
+// Patrones de archivo que NO sirven como nombre de producto (cámara / WhatsApp).
+const PATRONES_GENERICOS = [
+  /^img[-_]?\d+/i,
+  /^wa\d+/i,
+  /^image/i,
+  /^foto/i,
+  /^\d+$/,
+  /^whatsapp[\s_-]?image/i,
+]
 
 function esNombreGenerico(nombreSinExtension: string) {
   return PATRONES_GENERICOS.some((re) => re.test(nombreSinExtension.trim()))
 }
 
-function limpiarNombre(archivo: string, indiceEnCategoria: number, categoriaLabel: string) {
-  const sinExtension = archivo.replace(/\.[^.]+$/, "")
-  const normalizado = sinExtension.replace(/[-_]+/g, " ").trim()
+export type ProductoCatalogo = {
+  archivo: string
+  nombre: string
+  marca: string | null
+  categoriaSlug: string | null
+  categoriaLabel: string | null
+  imagen: string
+}
 
-  if (!normalizado || esNombreGenerico(normalizado)) {
-    return `${categoriaLabel} ${indiceEnCategoria + 1}`
+export type CatalogoData = {
+  productos: ProductoCatalogo[]
+  marcas: { slug: string; label: string; cantidad: number }[]
+  categorias: { slug: string; label: string; cantidad: number }[]
+}
+
+function listarImagenesRecursivo(dir: string, base: string): { rutaRelativa: string; segmentos: string[] }[] {
+  const resultado: { rutaRelativa: string; segmentos: string[] }[] = []
+
+  const entradas = fs.readdirSync(dir, { withFileTypes: true })
+  for (const entrada of entradas) {
+    const rutaCompleta = path.join(dir, entrada.name)
+    if (entrada.isDirectory()) {
+      resultado.push(...listarImagenesRecursivo(rutaCompleta, base))
+    } else if (EXTENSIONES_VALIDAS.includes(path.extname(entrada.name).toLowerCase())) {
+      const rutaRelativa = path.relative(base, rutaCompleta)
+      const segmentos = rutaRelativa.split(path.sep)
+      resultado.push({ rutaRelativa, segmentos })
+    }
   }
 
-  // Capitaliza cada palabra (Whey protein isolate -> Whey Protein Isolate)
-  return normalizado
-    .split(" ")
-    .map((palabra) => (palabra.length ? palabra[0].toUpperCase() + palabra.slice(1) : palabra))
-    .join(" ")
+  return resultado
 }
 
-function labelDeSlug(slug: string) {
-  if (ETIQUETAS_CATEGORIA[slug]) return ETIQUETAS_CATEGORIA[slug]
-  return slug
-    .split("-")
-    .map((p) => (p ? p[0].toUpperCase() + p.slice(1) : p))
-    .join(" ")
-}
+export function getCatalogo(): CatalogoData {
+  if (!fs.existsSync(CATALOGO_DIR)) {
+    return { productos: [], marcas: [], categorias: [] }
+  }
 
-export function getCatalogo(): CategoriaCatalogo[] {
-  if (!fs.existsSync(CATALOGO_DIR)) return []
+  const archivos = listarImagenesRecursivo(CATALOGO_DIR, CATALOGO_DIR)
 
-  const carpetas = fs
-    .readdirSync(CATALOGO_DIR, { withFileTypes: true })
-    .filter((d) => d.isDirectory())
-    .map((d) => d.name)
-    .sort()
+  // Contador por marca/categoría para nombres genéricos (Marca 1, Marca 2, ...)
+  const contadorPorGrupo: Record<string, number> = {}
 
-  const categorias: CategoriaCatalogo[] = carpetas.map((slug) => {
-    const label = labelDeSlug(slug)
-    const dirCategoria = path.join(CATALOGO_DIR, slug)
+  const productos: ProductoCatalogo[] = archivos.map(({ segmentos }) => {
+    const archivo = segmentos[segmentos.length - 1]
+    const carpetas = segmentos.slice(0, -1).filter((c) => !esCarpetaIgnorada(c))
 
-    const archivos = fs
-      .readdirSync(dirCategoria)
-      .filter((f) => EXTENSIONES_VALIDAS.includes(path.extname(f).toLowerCase()))
-      .sort()
+    let categoriaSlug: string | null = null
+    let categoriaLabel: string | null = null
+    let marca: string | null = null
 
-    const productos: ProductoCatalogo[] = archivos.map((archivo, i) => ({
+    for (const carpeta of carpetas) {
+      const slugNormalizado = normalizarSlug(carpeta)
+      if (CATEGORIAS_CONOCIDAS[slugNormalizado]) {
+        categoriaLabel = CATEGORIAS_CONOCIDAS[slugNormalizado]
+        categoriaSlug = normalizarSlug(categoriaLabel)
+      } else {
+        // La carpeta más cercana al archivo que no es categoría = marca
+        marca = tituloDesdeNombreCarpeta(carpeta)
+      }
+    }
+
+    const grupoKey = marca ?? categoriaLabel ?? "Producto"
+    contadorPorGrupo[grupoKey] = (contadorPorGrupo[grupoKey] ?? 0) + 1
+
+    const sinExtension = archivo.replace(/\.[^.]+$/, "")
+    const normalizado = sinExtension.replace(/[-_]+/g, " ").trim()
+    const nombre =
+      !normalizado || esNombreGenerico(normalizado)
+        ? `${grupoKey} ${contadorPorGrupo[grupoKey]}`
+        : tituloDesdeNombreCarpeta(normalizado)
+
+    return {
       archivo,
-      nombre: limpiarNombre(archivo, i, label),
-      categoriaSlug: slug,
-      categoriaLabel: label,
-      imagen: `/catalogo/${slug}/${encodeURIComponent(archivo)}`,
-    }))
-
-    return { slug, label, productos }
+      nombre,
+      marca,
+      categoriaSlug,
+      categoriaLabel,
+      imagen: `/catalogo/${segmentos.map(encodeURIComponent).join("/")}`,
+    }
   })
 
-  // Solo mostramos categorías que tengan al menos una imagen
-  return categorias.filter((c) => c.productos.length > 0)
+  // Armar listas únicas de marcas y categorías presentes, con cantidad de productos
+  const marcasMap = new Map<string, number>()
+  const categoriasMap = new Map<string, { label: string; cantidad: number }>()
+
+  for (const p of productos) {
+    if (p.marca) {
+      marcasMap.set(p.marca, (marcasMap.get(p.marca) ?? 0) + 1)
+    }
+    if (p.categoriaSlug && p.categoriaLabel) {
+      const actual = categoriasMap.get(p.categoriaSlug)
+      categoriasMap.set(p.categoriaSlug, {
+        label: p.categoriaLabel,
+        cantidad: (actual?.cantidad ?? 0) + 1,
+      })
+    }
+  }
+
+  const marcas = Array.from(marcasMap.entries())
+    .map(([label, cantidad]) => ({ slug: normalizarSlug(label), label, cantidad }))
+    .sort((a, b) => a.label.localeCompare(b.label))
+
+  const categorias = Array.from(categoriasMap.entries())
+    .map(([slug, { label, cantidad }]) => ({ slug, label, cantidad }))
+    .sort((a, b) => a.label.localeCompare(b.label))
+
+  return { productos, marcas, categorias }
 }
 
-export function getTotalProductos(categorias: CategoriaCatalogo[]) {
-  return categorias.reduce((acc, c) => acc + c.productos.length, 0)
+export function getTotalProductos(data: CatalogoData) {
+  return data.productos.length
 }
