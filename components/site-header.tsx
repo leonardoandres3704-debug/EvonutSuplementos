@@ -7,6 +7,7 @@ import { whatsappLink } from "@/lib/data"
 
 const navLinks = [
   { href: "#productos", label: "Productos" },
+  { href: "/catalogo", label: "Catálogo completo" },
   { href: "#combos", label: "Combos" },
   { href: "#marcas", label: "Marcas" },
   { href: "#nosotros", label: "Nosotros" },
