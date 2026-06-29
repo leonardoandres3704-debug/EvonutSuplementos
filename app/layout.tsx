@@ -19,7 +19,21 @@ export const metadata: Metadata = {
   description:
     'Evonut distribuye más de 20 marcas de suplementos deportivos. Encontrá proteínas, creatina, pre-entrenos y combos a medida para maratón, ciclismo y gym.',
   icons: {
-    icon: '/icon.svg',
+    icon: [
+      {
+        url: '/icon-light-32x32.png',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: '/icon-dark-32x32.png',
+        media: '(prefers-color-scheme: dark)',
+      },
+      {
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+    apple: '/apple-icon.png',
   },
 }
 

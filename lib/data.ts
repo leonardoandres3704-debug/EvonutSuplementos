@@ -1,7 +1,15 @@
-export const WHATSAPP_NUMBER = "5491100000000" // Reemplazar por el número real de Evonut
+export const WHATSAPP_NUMBER = "5493415312051"
 
 export function whatsappLink(message: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+}
+
+export const CONTACTO = {
+  telefono1: { display: "341 531-2051", tel: "+5493415312051" },
+  telefono2: { display: "341 363-7006", tel: "+5493413637006" },
+  email: "Evonut2026@gmail.com",
+  facebook: "https://www.facebook.com/profile.php?id=61573634896476",
+  instagram: "https://www.instagram.com/evonut_?igsh=MWdoaWY2aGRrbGpncA==",
 }
 
 export type Producto = {
@@ -82,7 +90,6 @@ export const marcas = [
   "Cellucor",
   "Myprotein",
   "BSN",
-  "Landerfit",
 ]
 
 export type Combo = {

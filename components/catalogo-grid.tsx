@@ -52,7 +52,7 @@ export function CatalogoGrid({ data }: { data: CatalogoData }) {
               : "border-border bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground"
           }`}
         >
-          Todas las marcas ({data.productos.length})
+          Todas las marcas
         </button>
         {data.marcas.map((m) => (
           <button
@@ -64,7 +64,7 @@ export function CatalogoGrid({ data }: { data: CatalogoData }) {
                 : "border-border bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground"
             }`}
           >
-            {m.label} ({m.cantidad})
+            {m.label}
           </button>
         ))}
       </div>

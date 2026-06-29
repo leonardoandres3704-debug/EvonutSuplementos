@@ -1,6 +1,6 @@
-import { MessageCircle } from "lucide-react"
+import { MessageCircle, Phone, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { whatsappLink } from "@/lib/data"
+import { CONTACTO, whatsappLink } from "@/lib/data"
 
 export function ContactoCta() {
   return (
@@ -22,6 +22,21 @@ export function ContactoCta() {
             Ya sea que corras tu primer maratón, sumes kilómetros en la bici o busques ganar fuerza
             en el gym, te ayudamos a elegir lo que realmente necesitás.
           </p>
+
+          <div className="mt-6 flex flex-col gap-2 text-sm text-muted-foreground">
+            <a href={`tel:${CONTACTO.telefono1.tel}`} className="flex items-center gap-2 transition-colors hover:text-foreground">
+              <Phone className="size-4 text-primary" />
+              {CONTACTO.telefono1.display}
+            </a>
+            <a href={`tel:${CONTACTO.telefono2.tel}`} className="flex items-center gap-2 transition-colors hover:text-foreground">
+              <Phone className="size-4 text-primary" />
+              {CONTACTO.telefono2.display}
+            </a>
+            <a href={`mailto:${CONTACTO.email}`} className="flex items-center gap-2 transition-colors hover:text-foreground">
+              <Mail className="size-4 text-primary" />
+              {CONTACTO.email}
+            </a>
+          </div>
         </div>
 
         <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/15 to-card p-8 md:p-10">
