@@ -115,7 +115,7 @@ export const combos: Combo[] = [
     productos: [
       "Proteína post-entrenamiento",
       "Creatina en cualquier momento",
-      "Glutamina post-entrenamiento o 1 hs antes de dormir",
+      "Glutamina post-entrenamiento ",
     ],
   },
   {
