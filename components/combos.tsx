@@ -3,19 +3,22 @@ import { Button } from "@/components/ui/button"
 import { combos, combosPeso, whatsappLink } from "@/lib/data"
 
 function ComboCard({ combo, index }: { combo: (typeof combos)[0]; index: number }) {
+  const isOdd = index % 2 === 1
   return (
     <article
       id={combo.id}
       className="grid grid-cols-1 overflow-hidden rounded-xl border border-border bg-card lg:grid-cols-2"
     >
-      <div className={`relative min-h-72 ${index % 2 === 1 ? "lg:order-2" : ""}`}>
+      {/* Imagen: aspect-ratio fijo 4/3 en móvil, altura completa en desktop */}
+      <div className={`relative aspect-[4/3] lg:aspect-auto lg:min-h-full ${isOdd ? "lg:order-2" : ""}`}>
         <img
           src={combo.imagen}
           alt={`${combo.titulo} - ${combo.deporte}`}
-          className="absolute inset-0 h-full w-full object-cover object-top"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent lg:bg-gradient-to-r" />
-        <span className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-foreground">
+        {/* gradiente sutil solo para mejorar legibilidad del badge */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-transparent" />
+        <span className="absolute left-4 top-4 rounded-full bg-primary/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-foreground shadow">
           {combo.deporte}
         </span>
       </div>
@@ -29,9 +32,7 @@ function ComboCard({ combo, index }: { combo: (typeof combos)[0]; index: number 
             {combo.objetivo}
           </p>
         </div>
-
         <p className="leading-relaxed text-muted-foreground">{combo.descripcion}</p>
-
         <ul className="flex flex-col gap-3">
           {combo.productos.map((p) => (
             <li key={p} className="flex items-start gap-3 text-sm text-foreground">
@@ -42,7 +43,6 @@ function ComboCard({ combo, index }: { combo: (typeof combos)[0]; index: number 
             </li>
           ))}
         </ul>
-
         <div className="mt-auto pt-2">
           <Button
             render={
@@ -74,8 +74,7 @@ export function Combos() {
             Combos recomendados según tu disciplina
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
-            No todos los deportes necesitan lo mismo. Armamos combinaciones de suplementos pensadas
-            para cada tipo de entrenamiento.
+            No todos los deportes necesitan lo mismo. Armamos combinaciones pensadas para cada tipo de entrenamiento.
           </p>
         </div>
 
@@ -97,8 +96,7 @@ export function Combos() {
               Combos Pérdida de Peso
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
-              Dos opciones según tu estilo de entrenamiento: con o sin cafeína. Consultanos cuál se
-              adapta mejor a vos.
+              Dos opciones según tu estilo de entrenamiento: con o sin cafeína.
             </p>
           </div>
 
@@ -109,13 +107,15 @@ export function Combos() {
                 id={combo.id}
                 className="flex flex-col overflow-hidden rounded-xl border border-border bg-card"
               >
-                <div className="relative h-72 w-full overflow-hidden">
+                {/* aspect-[4/3] garantiza proporción consistente en cualquier ancho */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <img
                     src={combo.imagen}
                     alt={combo.titulo}
-                    className="h-full w-full object-cover object-top"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
                   />
-                  <span className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-foreground">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-transparent" />
+                  <span className="absolute left-4 top-4 rounded-full bg-primary/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-foreground shadow">
                     {combo.deporte}
                   </span>
                 </div>
@@ -129,9 +129,7 @@ export function Combos() {
                       {combo.objetivo}
                     </p>
                   </div>
-
                   <p className="text-sm leading-relaxed text-muted-foreground">{combo.descripcion}</p>
-
                   <ul className="flex flex-col gap-2">
                     {combo.productos.map((p) => (
                       <li key={p} className="flex items-start gap-3 text-sm text-foreground">
@@ -142,7 +140,6 @@ export function Combos() {
                       </li>
                     ))}
                   </ul>
-
                   <div className="mt-auto pt-2">
                     <Button
                       render={
