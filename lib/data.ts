@@ -104,48 +104,77 @@ export type Combo = {
 
 export const combos: Combo[] = [
   {
-    id: "maraton",
-    titulo: "Combo Maratón",
-    deporte: "Running / Resistencia",
-    imagen: "/combo-maraton.png",
+    id: "gym",
+    titulo: "Combo Fuerza",
+    deporte: "Fuerza / Hipertrofia",
+    imagen: "/combo-gym.jpg",
     descripcion:
-      "Pensado para corredores de fondo que necesitan energía sostenida, buena hidratación y una recuperación efectiva entre entrenamientos.",
-    objetivo: "Energía sostenida e hidratación en distancias largas",
+      "Para quienes buscan ganar fuerza y masa muscular. Una combinación clásica y efectiva para potenciar cada sesión y maximizar la recuperación.",
+    objetivo: "Recuperación y masa muscular",
     productos: [
-      "Geles energéticos para tomar en ruta",
-      "Electrolitos para reponer sales en esfuerzos prolongados",
-      "Proteína para la recuperación post-carrera",
-      "Aminoácidos para reducir el desgaste muscular",
+      "Proteína post-entrenamiento",
+      "Creatina en cualquier momento",
+      "Glutamina post-entrenamiento o 1 hs antes de dormir",
     ],
   },
   {
     id: "ciclismo",
     titulo: "Combo Ciclismo",
     deporte: "Ruta / MTB",
-    imagen: "/combo-ciclismo.png",
+    imagen: "/combo-ciclismo.jpg",
     descripcion:
-      "Ideal para ciclistas que pasan horas sobre la bici. Combina carbohidratos de rápida asimilación con hidratación y soporte articular.",
-    objetivo: "Potencia y resistencia en salidas largas",
+      "La mejor vista viene después de la subida. No dejes que la fatiga te detenga antes de llegar. Geles y barras pensados para el ciclista.",
+    objetivo: "Energía y resistencia en salidas largas",
     productos: [
-      "Geles y carbohidratos para mantener el ritmo",
+      "Geles y barras proteicas para el camino",
+      "Repositor energético con carbohidratos",
       "Electrolitos para evitar calambres",
-      "BCAA para preservar la masa muscular",
       "Proteína para recuperar después de cada salida",
     ],
   },
   {
-    id: "gym",
-    titulo: "Combo Gym",
-    deporte: "Fuerza / Hipertrofia",
-    imagen: "/combo-gym.png",
+    id: "maraton",
+    titulo: "Combo Maratón",
+    deporte: "Running / Resistencia",
+    imagen: "/combo-maraton.jpg",
     descripcion:
-      "Para quienes buscan ganar fuerza y masa muscular. Una combinación clásica y efectiva para potenciar cada sesión y maximizar la recuperación.",
-    objetivo: "Fuerza, volumen y recuperación muscular",
+      "Que el cansancio no te detenga. Geles energizantes formulados para corredores de fondo que necesitan energía rápida y sostenida en ruta.",
+    objetivo: "Energía sostenida durante la competencia",
     productos: [
-      "Proteína whey para construir músculo",
-      "Creatina para fuerza y potencia",
-      "Pre-entreno para sesiones intensas",
-      "BCAA para acelerar la recuperación",
+      "Geles energéticos GU, ENA y Nutremax",
+      "Repositor energético Race con electrolitos",
+      "Proteína para la recuperación post-carrera",
+    ],
+  },
+]
+
+export const combosPeso: Combo[] = [
+  {
+    id: "perdida-peso-pro",
+    titulo: "Combo Pérdida de Peso PRO",
+    deporte: "Con cafeína",
+    imagen: "/combo-peso-pro.jpg",
+    descripcion:
+      "¡Llevá tu definición al siguiente nivel! La combinación definitiva para quemar grasa y mantener músculo magro. Ideal para potenciar tus entrenamientos.",
+    objetivo: "Quemar grasa y mantener músculo magro",
+    productos: [
+      "BSN Syntha 6 Isolate — proteína de definición",
+      "Carnitina — metabolizador de grasa",
+      "Nutrex Lipo 6 Black Ultra — termogénico concentrado",
+    ],
+  },
+  {
+    id: "perdida-peso-sin-cafeina",
+    titulo: "Combo Pérdida de Peso Sin Cafeína",
+    deporte: "Sin cafeína",
+    imagen: "/combo-peso-sin-cafeina.jpg",
+    descripcion:
+      "¿Entrenas de noche o sos sensible a la cafeína? Lograí tu mejor versión sin alterar tu descanso. Para personas que entrenan tarde, hipertensos o quienes buscan un proceso de pérdida de peso más natural.",
+    objetivo: "Pérdida de peso sin afectar el descanso",
+    productos: [
+      "ENA Whey Protein — proteína sin estimulantes",
+      "Hoch Loss Weight Thermo Genix — termogénico sin cafeína",
+      "Star Nutrition L-Carnitina 1000 — quemador natural",
     ],
   },
 ]
