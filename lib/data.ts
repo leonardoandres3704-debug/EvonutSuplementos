@@ -90,6 +90,7 @@ export const marcas = [
   "Cellucor",
   "Myprotein",
   "BSN",
+  "Landerfit"
 ]
 
 export type Combo = {
